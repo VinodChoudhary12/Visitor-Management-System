@@ -347,20 +347,20 @@ function UserMeetings() {
                                                 {/* Reject button with conditional disable and additional logic */}
                                                 {activeMeetingId === meeting.id ? (
                                                     <>
-                                                        <input
-                                                            className="border border-slate-600 ml-2"
-                                                            placeholder="Enter reason for rejection"
-                                                            onChange={(e) => setDescription(e.target.value)}
-                                                            value={description}
-                                                            required
-                                                        />
-                                                        <button
-                                                            className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2.5 py-1 text-center me-2 mb-2"
+                                                         <button
+                                                            className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-2.5 py-1 text-center me-2 mb-2"
                                                             onClick={() => changeStatus(meeting.id, "REJECTED")}
                                                             disabled={["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)}
                                                         >
                                                             Confirm Reject
                                                         </button>
+                                                        <input
+                                                            className="border rounded border-slate-600 ml-2 mr-2 h-auto"
+                                                            placeholder="Enter reason for rejection"
+                                                            onChange={(e) => setDescription(e.target.value)}
+                                                            value={description}
+                                                            required
+                                                        />
                                                     </>
                                                 ) : (
                                                     <button
