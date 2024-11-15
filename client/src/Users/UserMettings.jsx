@@ -1,4 +1,7 @@
 
+
+
+
 // import axios from "axios";
 // import { useEffect, useState } from "react";
 // import Navbar from "./Navbar";
@@ -32,14 +35,16 @@
 //         return meetingDate === today;
 //     };
 
+//     // Modified changeStatus to include status check
 //     const changeStatus = async (meetingId, newStatus) => {
 //         const meeting = meetings.find((m) => m.id === meetingId);
 
-//         if (!meeting) {
+//         // Status restriction added here
+//         if (!meeting || ["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)) {
 //             Swal.fire({
-//                 icon: "error",
-//                 title: "Meeting not found",
-//                 text: "The specified meeting does not exist.",
+//                 icon: "warning",
+//                 title: "Action Restricted",
+//                 text: "You cannot change the status of this meeting.",
 //             });
 //             return;
 //         }
@@ -99,27 +104,13 @@
 //                             <table className="table w-full border border-gray-300">
 //                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
 //                                     <tr>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Name
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Email
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Status
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Description
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             From
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Time
-//                                         </th>
-//                                         <th scope="col" className="px-6 py-3">
-//                                             Actions
-//                                         </th>
+//                                         <th scope="col" className="px-6 py-3">Name</th>
+//                                         <th scope="col" className="px-6 py-3">Email</th>
+//                                         <th scope="col" className="px-6 py-3">Status</th>
+//                                         <th scope="col" className="px-6 py-3">Description</th>
+//                                         <th scope="col" className="px-6 py-3">From</th>
+//                                         <th scope="col" className="px-6 py-3">Time</th>
+//                                         <th scope="col" className="px-6 py-3">Actions</th>
 //                                     </tr>
 //                                 </thead>
 //                                 <tbody className="text-sm">
@@ -131,7 +122,7 @@
 //                                                 ? "bg-gray-100"
 //                                                 : "bg-white"
 //                                                 } 
-//                                                         ${meeting.status ===
+//                                                     ${meeting.status ===
 //                                                     "PENDING" &&
 //                                                     isToday(
 //                                                         meeting.meeting_time
@@ -139,7 +130,7 @@
 //                                                     ? "bg-sky-100 shadow"
 //                                                     : ""
 //                                                 } 
-//                                                         border-b `}
+//                                                     border-b `}
 //                                         >
 //                                             <td>{meeting.name}</td>
 //                                             <td>{meeting.email}</td>
@@ -148,34 +139,38 @@
 //                                             <td>{meeting.visitorCompany}</td>
 //                                             <td>{formatMeetingTime(meeting.meeting_time)}</td>
 //                                             <td className="flex justify-evenly">
+//                                                 {/* Approve button with conditional disable */}
 //                                                 <button
-//                                                     className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-2.5 py-1 text-center me-1 mb-2"
+//                                                     className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-2.5 py-1 text-center me-1 mb-2"
 //                                                     onClick={() => changeStatus(meeting.id, "APPROVED")}
+//                                                     disabled={["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)}
 //                                                 >
 //                                                     Approve
 //                                                 </button>
+
+//                                                 {/* Reject button with conditional disable and additional logic */}
 //                                                 {activeMeetingId === meeting.id ? (
 //                                                     <>
+//                                                          <button
+//                                                             className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-2.5 py-1 text-center me-2 mb-2"
+//                                                             onClick={() => changeStatus(meeting.id, "REJECTED")}
+//                                                             disabled={["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)}
+//                                                         >
+//                                                             Confirm Reject
+//                                                         </button>
 //                                                         <input
-//                                                             className="border border-slate-600 ml-2"
+//                                                             className="border rounded border-slate-600 ml-2 mr-2 h-auto"
 //                                                             placeholder="Enter reason for rejection"
 //                                                             onChange={(e) => setDescription(e.target.value)}
 //                                                             value={description}
 //                                                             required
 //                                                         />
-//                                                         <button
-//                                                             className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2.5 py-1 text-center me-2 mb-2"
-//                                                             onClick={() =>
-//                                                                 changeStatus(meeting.id, "REJECTED")
-//                                                             }
-//                                                         >
-//                                                             Confirm Reject
-//                                                         </button>
 //                                                     </>
 //                                                 ) : (
 //                                                     <button
-//                                                         className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm px-2.5 py-1 text-center me-2 mb-2"
+//                                                         className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2.5 py-1 text-center me-2 mb-2"
 //                                                         onClick={() => setActiveMeetingId(meeting.id)}
+//                                                         disabled={["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)}
 //                                                     >
 //                                                         Reject
 //                                                     </button>
@@ -199,7 +194,7 @@
 
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "./Navbar";
 import Swal from "sweetalert2";
 import formatMeetingTime from "../FormatDate";
@@ -208,6 +203,7 @@ function UserMeetings() {
     const [meetings, setMeetings] = useState([]);
     const [description, setDescription] = useState("");
     const [activeMeetingId, setActiveMeetingId] = useState(null);
+    const activeRowRef = useRef(null);
 
     const fetchData = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -220,6 +216,7 @@ function UserMeetings() {
             console.error("Error fetching visitor details:", error);
         }
     };
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -231,11 +228,8 @@ function UserMeetings() {
         return meetingDate === today;
     };
 
-    // Modified changeStatus to include status check
     const changeStatus = async (meetingId, newStatus) => {
         const meeting = meetings.find((m) => m.id === meetingId);
-
-        // Status restriction added here
         if (!meeting || ["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)) {
             Swal.fire({
                 icon: "warning",
@@ -289,6 +283,21 @@ function UserMeetings() {
         }
     };
 
+    // Click outside handler to close the "Confirm Reject" section
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (activeRowRef.current && !activeRowRef.current.contains(event.target)) {
+                setActiveMeetingId(null);
+                setDescription("");
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -327,6 +336,7 @@ function UserMeetings() {
                                                     : ""
                                                 } 
                                                     border-b `}
+                                            ref={activeMeetingId === meeting.id ? activeRowRef : null}
                                         >
                                             <td>{meeting.name}</td>
                                             <td>{meeting.email}</td>
@@ -335,7 +345,6 @@ function UserMeetings() {
                                             <td>{meeting.visitorCompany}</td>
                                             <td>{formatMeetingTime(meeting.meeting_time)}</td>
                                             <td className="flex justify-evenly">
-                                                {/* Approve button with conditional disable */}
                                                 <button
                                                     className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-2.5 py-1 text-center me-1 mb-2"
                                                     onClick={() => changeStatus(meeting.id, "APPROVED")}
@@ -344,10 +353,9 @@ function UserMeetings() {
                                                     Approve
                                                 </button>
 
-                                                {/* Reject button with conditional disable and additional logic */}
                                                 {activeMeetingId === meeting.id ? (
                                                     <>
-                                                         <button
+                                                        <button
                                                             className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-2.5 py-1 text-center me-2 mb-2"
                                                             onClick={() => changeStatus(meeting.id, "REJECTED")}
                                                             disabled={["CHECKED_IN", "CHECKED_OUT", "CANCELED"].includes(meeting.status)}
@@ -387,3 +395,4 @@ function UserMeetings() {
 }
 
 export default UserMeetings;
+
