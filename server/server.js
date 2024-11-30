@@ -870,6 +870,31 @@ app.post('/reset-password', async (req, res) => {
         return res.status(500).json({ error: 'Error processing password reset.' });
     }
 });
+app.get('/AllMeetings', (req, res) => {
+    const selectSql = `
+        SELECT *
+FROM visitors
+WHERE meeting_time >= CURDATE()
+ORDER BY meeting_time ASC`;
+    try {
+        db.query(selectSql, (err, result) => {
+            if (err) {
+                console.error("Database query error:", err);
+                return res.status(500).json({ message: "Database query error", error: err });
+            }
+            //console.log("Query result:", result); // Debugging log
+            if (result.length > 0) {
+                res.json(result);
+            } else {
+                // console.log(selectSql);
+                res.status(200).json({ message: 'No Meetings Found' });
+            }
+        });
+    } catch (error) {
+        console.log("Unexpected error:", error);
+        res.status(500).json({ message: "Something went wrong", error });
+    }
+});
 
 
 // Start Server
